@@ -1,4 +1,5 @@
-package code;
+package code.variable;
+
 public class variableDemo1 {
   public static void main(String[] args) {
       System.out.println("Hello World");

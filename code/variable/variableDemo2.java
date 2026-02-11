@@ -1,4 +1,4 @@
-package code;
+package code.variable;
 import java.util.Scanner;
 
 public class variableDemo2 {
