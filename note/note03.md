@@ -11,9 +11,3 @@ float num = 1000F
 `%n` 平台無關的換行符 Platform-independent newline (like \n)
 
 Scanner is an object in Java, holding the reference to Operatin System Resources.
-
-byte a = 10;
-double b = 10000;
-
-double c = a + c
-
