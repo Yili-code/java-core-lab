@@ -1,34 +1,26 @@
-`javac main.java` 將原始碼轉為 Bytecode, .class file
+# Java 工具與執行
 
-`java main` JVM 載入 Bytecode，解釋並轉譯為特定 OS 的 machine code
+`javac main.java`：將 Java 原始碼編譯為字節碼（Bytecode），輸出 `.class` 檔案。
 
-1900
-Stanford University Network - James Gosling - Green plan
-Oak language
+`java main`：JVM 載入字節碼，並透過解譯或 JIT 即時編譯執行，產生對應平台的機器碼。
 
-1992
-FirstPerson
-Green OS, Oak 
+# 歷史概覽
 
-1994
-WebRunner already use Oak, change name to Java
+- 1990s：由 James Gosling 等人在 Sun Microsystems 開發，語言原型名為 Oak，後來改名為 Java。
 
-## Java SE (basic)
-Destop Application (like C/C++)
+Java 平台簡介
 
-## Java ME
-Embedding system
-Replace by Android and iOS
+## Java SE（Standard Edition）
+- 核心語言與標準類別庫，適合桌面與一般應用程式開發。
 
-## Java EE
-1. Destop Application (IDEA, Clion, Pycharm)
+## Java ME（Micro Edition）
+- 適用於嵌入式或資源受限裝置（歷史用途），現今多被其他平台或專用韌體取代。
 
-2. Entriprise Application (springcloud)
+## Java EE / Jakarta EE（Enterprise Edition）
+- 企業級伺服器端與分散式應用的支援平台，常見於 Web 應用、微服務與企業整合。
 
-3. Embedding application (android)
-
-4. Science Caculate (matlab)
-
-5. Big data development (hadoop)
-
-6. Game development (Minecraft)
+應用範例（示意）
+- 桌面工具與 IDE：Swing / JavaFX
+- 企業應用與微服務：Spring、Jakarta EE
+- 大數據生態：Hadoop 等部分元件使用 Java
+- 遊戲或工具：例如 Minecraft

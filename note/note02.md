@@ -1,81 +1,52 @@
 ```java
 public class HelloWorld {
   public static void main(String[] args) {
-    system.output.println("Hello World!");
+    System.out.println("Hello World!");
   }
 }
 ```
 
-`System` standard library 中的 class
-
-`out` 是 System class 下在靜態成員，指向 `PrintStream` object 的 Reference.
-
-雖然冗贅但提供架構上的嚴謹性: 明確的存取控制、類型宣告
-
---- 
-# Static v. Instance
-
-`static` 意味著 JVM 不需要實例化 (instantiate) 這個 class 就能執行此方法。
-從記憶體角度看，他在 class 載入時就已存在於 Method Area，全域共享。
-
-`Instantiate: class -> object` 
-將抽象的 class 轉化為 Memory 中具體的 Object 的過程
-頻繁 Instantiate 會導致 GC 頻繁啟動，進而影響 Throughput
-
-`Thread Safety` 
-- Static: 
-多個 Thread 同時呼叫並修改，就會發生 Race Condition，導致數據錯亂。
-static 適合無狀態 Stateless 的操作
-
-- Instance:
-每個 Thread 擁有自己獨立的 Instance ，彼此的數據 Isolation，雖然較耗記憶體但安全。
-
---- 
-# GC Garbage Collection -  JVM 自動管理記憶體的機制
-GC 會定期掃描 Heap Memory，找出那些不再被任何變數引用的物件，並將其占用的記憶體回收。
-The Cost: GC 運作時，有時會觸發 Stop-The-World (`STW`)，即短暫暫停所有程式邏輯清理記憶體。
+`System` 為標準類別，`out` 是 `System` 的靜態成員，指向一個 `PrintStream` 實例。
 
 ---
-# Singleton Pattern - Design Pattern
-確保一個 class 在整個 application 運行期間，只會有一個 Instance 存在
 
-1. Resource Management
-Without: 每個 User 進來都 new 一個連線，資料庫會瞬間崩潰
-With: 整個 App 只有一個 DatabasePool 物件，所有人排隊共用它，這就是 `Resource Throttling`
+# Static vs Instance
 
-2. Lazy Initializtion\Loading (延遲載入)
-Static: 程式一啟動，這 2GB 就在記憶體裡了。
-Singleton: 設計成直到第一個使用者呼叫 getInstance() 時，才去執行那耗時的 new 動作。這在優化啟動速度時至關重要
+`static` 表示類別載入時即存在（存放於 Method Area），無須建立物件即可存取；適合無狀態（stateless）或共用資源。
 
-3. Polymorophism (面向介面編程)
-可以寫一個 StorageService 介面，在測試環境時，Singleton 回傳的是記憶體模擬的儲存空間；在正式環境（Production），它回傳的是雲端 S3 的儲存空間。這種靈活性，static 做不到。
+`實例化（instantiate）`：將類別轉為記憶體中的物件，頻繁建立物件會增加 GC 次數，可能影響效能。
+
+Thread Safety
+- Static：若多執行緒同時修改共用靜態資料，可能產生競爭條件（Race Condition）。
+- Instance：每個執行緒通常操作自己的物件狀態，隔離性較好，但較耗記憶體。
 
 ---
-# (Unsolved) Double-Checked Locking `DCL`
-這是在多執行緒（Multi-threading）環境下，為了確保 Singleton 真的只有一個而設計的防禦機制
+
+# GC（Garbage Collection）
+GC 會回收不再被引用的 Heap 物件。GC 運作時有時會觸發 Stop-The-World（STW），短暫暫停應用執行以清理記憶體，需注意延遲與吞吐量折衷。
+
+---
+
+# Singleton Pattern
+確保一個類別在整個應用生命週期只有一個實例。
+
+優點：集中資源管理（例如連線池）、可以延遲初始化（lazy initialization）、容易在不同環境替換實作（介面導向）。
+
+---
+
+# Double-Checked Locking（DCL）
+在多執行緒環境下常用於懶載入單例，但需要正確的同步與記憶體可見性（`volatile` 在 Java 中通常是必要的）。
+
+範例（簡化）：
 
 ```java
-public static PaymentGateway getInstance() {
-  if (instance == null) {
-    instance = new PaymentGateway();
-  }
-  return instance;
-}
-```
-假如兩個人同時點擊，系統會出現兩個 PaymentGateway -> Race Condition
+private static volatile PaymentGateway instance;
 
-```java
 public static PaymentGateway getInstance() {
-    // 第一層檢查：效能優化
     if (instance == null) {
-        
-        // T2 enter synchronized
         synchronized (PaymentGateway.class) {
-            
-            // 第二層檢查：
             if (instance == null) {
                 instance = new PaymentGateway();
-                // instantiate
             }
         }
     }
@@ -83,11 +54,11 @@ public static PaymentGateway getInstance() {
 }
 ```
 
---- 
-# Stack v. Heap
+---
 
-Stack stores `Local Variables`、method、basic types，由系統自動分配/釋放，Thread Safety: 安全(每個 Thread 有獨立的 Stack)
+# Stack vs Heap
 
-Heap stores `Objects/Instance`、array，由開發者透過 `new` 觸發，由 GC 回收。 Thead Safety: 不安全(所有 Thread 共享同個 Heap)
+- Stack：儲存方法呼叫、區域變數與基本型別，由系統自動分配與釋放，每個執行緒擁有獨立 Stack（執行緒安全）。
+- Heap：儲存物件與陣列，由 `new` 產生並由 GC 管理，為所有執行緒共用（需注意同步問題）。
 
-如果一個 `Static` method 中只使用局部變數 Local Variables，他是 Thread-Safety 的，因為每個呼叫該方法的 Thread ，都會在自己的 Stack 建立 Variables 副本，互不干涉。
+若 `static` 方法只使用區域變數，該方法在記憶體層級上仍是執行緒安全的，因為每個執行緒有自己的區域變數副本。

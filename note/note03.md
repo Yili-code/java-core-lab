@@ -1,13 +1,6 @@
----
-![alt text](image-1.png)
-long num = 1000L
-float num = 1000F
+## Type Promotion（型別提升）
 
----
-# Type Promotion
+- 在格式化輸出（例如 `printf`）時，浮點數通常使用 `%f`。
+- `%n` 為平台無關的換行符（等同於 `\n` 在大多數系統上）。
 
-無論變數型態是 `float` 還是 `double`，在 `printf` 都屬於浮點數範疇，統一使用 `%f`.
-
-`%n` 平台無關的換行符 Platform-independent newline (like \n)
-
-Scanner is an object in Java, holding the reference to Operatin System Resources.
+`Scanner` 是一個物件，用於包裝並操作輸入資源（例如 System.in），因此需要注意資源的關閉與例外處理。
