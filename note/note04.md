@@ -4,12 +4,23 @@
 Arrays.stream(arr3).forEach(n -> System.out.printf("%d ", n));
 ```
 
-`Arrays.stream(arr3)`：將陣列 `arr3` 轉為 `stream`；若 `arr3` 為 `int[]`，回傳 `IntStream`，這是針對 primitive 的特殊化（primitive specialization），可以避免大量 auto-boxing 的效能損耗。
+利用 Java Stream API 將 array `arr3` 封裝唯一個具備延遲求值特性的 Stream Object，並透過 Internal Iteration mechanism，將一個符合 Consumer functional interface 規範的 lambda expression 應用於 Stream 中的每個元素，最終在準輸出執行具格式化的 terminal operation.
 
-- `forEach(...)`：終端操作（terminal），會遍歷串流並執行指定動作；執行後串流被消耗，無法重複使用。
-- `n -> System.out.printf(...)`：Lambda Expression，實作 `Consumer<T>`，接受參數且不回傳值。
+`Arrays.stream(T[] array)`：將陣列 `array` 轉為 `stream`，轉化為一個具備函數編程能力的序列化元素流 `Sequence of Elements` ；若 `array` 為 `int[]`，回傳 `IntStream`，這是針對 primitive 的特殊化（primitive specialization），可以避免大量 auto-boxing 的效能損耗。
 
+`forEach(n -> System.out.printf("%d ", n));` forEach 規定參數必須是一個 `Consumer` (有輸入沒輸出)，在 Compiler 進行檢查 型別斷定(Type Inference) 後就會將其編譯為 Consumer interface 的實作
 
+## Array 與 Stream
+
+`Array` -> Data Structure
+
+`Stream` -> Comutational Pipeline，負責對資料進行聲明式的處理與轉換
+
+### Mutablility vs. Immutability
+
+`Array` -> 可以直接修改特定引索的值，具有 side effects
+
+`Stream` -> 函數式。所有的轉換都會回傳一個新的 Stream，而不會更動原本的資料源，對於 Concurrency 極為重要。
 
 ## Generics 與 Auto-boxing
 
