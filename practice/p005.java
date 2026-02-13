@@ -1,3 +1,4 @@
+// 隨機生成十個不重複的數字，並利用 java.util.Arrays print
 package practice;
 import java.util.Random;
 import java.util.Arrays;
