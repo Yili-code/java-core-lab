@@ -57,3 +57,10 @@ public void myMethod() {
 
 - Heap：彈性大、由 GC 管理、儲存物件實體。需關注分配頻率與回收策略以避免效能或記憶體問題。
 
+- stack, heap, method: 
+
+-- stack: method 被調用進 stack 執行，當執行完畢自動釋放
+
+-- heap: new
+
+-- method: 相關字節碼文件 (class)存儲

@@ -1,25 +1,34 @@
+// remove all target in array and print the result
 package practice;
+import java.util.Random;
 import java.util.Scanner;
-
+import java.util.Arrays;
 public class p008 {
   public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    while (true) {
-      float num = sc.nextInt();
-      if (num < 0) {
-        System.out.println("Stop!");
-        break;
-      }
+    int[] arr = new int[10];
+    Random r = new Random();
+    for (int i = 0; i < arr.length; i++) arr[i] = r.nextInt(0,10) + 1;
+    Arrays.stream(arr).forEach(n -> System.out.printf("%d ", n));
+    System.out.println();
 
-      if (num < 1.0) {
-        System.out.println("10$");
-      } else if (num > 1.0 && num <= 5.0) {
-        System.out.println(money(num));
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Please enter the target: ");
+    int target = sc.nextInt();
+
+    int left = 0, right = 0;
+    while (right != arr.length) {
+      if (arr[right] == target) {
+        right++;
+      } else {
+        arr[left] = arr[right];
+        left++;
+        right++;
       }
     }
-  }
 
-  public static string money(int num) {
-    
+    arr = Arrays.copyOf(arr, left);
+
+    Arrays.stream(arr).forEach(n -> System.out.printf("%d ", n));
+    sc.close();
   }
 }
