@@ -1,0 +1,12 @@
+# 編譯輸出
+out/
+
+# IDE / 編輯器
+.idea/
+*.iml
+.vscode/
+*.class
+
+# 系統
+.DS_Store
+Thumbs.db
