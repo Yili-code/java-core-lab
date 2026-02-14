@@ -17,18 +17,16 @@ public class p008 {
 
     int left = 0, right = 0;
     while (right != arr.length) {
-      if (arr[right] == target) {
-        right++;
-      } else {
+      if (arr[right] != target) {
         arr[left] = arr[right];
         left++;
-        right++;
       }
+      right++;
     }
 
     arr = Arrays.copyOf(arr, left);
-
     Arrays.stream(arr).forEach(n -> System.out.printf("%d ", n));
+    System.out.println();
     sc.close();
   }
 }

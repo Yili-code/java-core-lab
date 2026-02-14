@@ -1,27 +1,34 @@
 # java-core-lab
 
-Java 核心概念學習與練習，包含 OOP 原理與範例程式碼。
+一個用於練習與記錄 Java 基礎與物件導向概念的小型範例庫，收錄變數、運算子、流程控制、類別與練習題等範例程式碼，適合初學者與自我練習使用。
 
-專案檔案：
-- 程式碼示例：
-  - [`code.variableDemo1`](code/variableDemo1.java) — [code/variableDemo1.java](code/variableDemo1.java)
-  - [`code.variableDemo2`](code/variableDemo2.java) — [code/variableDemo2.java](code/variableDemo2.java)
-  - [`code.variableDemo3`](code/variableDemo3.java) — [code/variableDemo3.java](code/variableDemo3.java)
-  - [`code.operatorDemo1`](code/operatorDemo1.java) — [code/operatorDemo1.java](code/operatorDemo1.java)
-  - [`code.operatorDemo2`](code/operatorDemo2.java) — [code/operatorDemo2.java](code/operatorDemo2.java)
-  - [`code.operatorDemo3`](code/operatorDemo3.java) — [code/operatorDemo3.java](code/operatorDemo3.java)
+## 目錄
 
-- 筆記：
-  - [note/note01.md](note/note01.md)
-  - [note/note02.md](note/note02.md)
-  - [note/note03.md](note/note03.md)
+- 簡介
 
+- 專案結構
+- 如何編譯與執行
 
-編譯與執行（在專案根目錄）：
-```sh
-# 編譯所有示例（保留 package 結構）
-javac code/variableDemo1.java
+## 專案結構（重點）
 
-# 執行範例（以 variableDemo1 為例）
-java code.variableDemo1
+- `code/`：範例程式碼與練習題。
+  - `datatype/`、`operator/`、`variable/`、`switch/`、`oop/` 等分類資料夾。
+- `note/`：學習筆記（Markdown）。
+- `practice/`：練習題檔案（例如 `p001.java` ~ `p012.java`）。
+
+若要瀏覽完整檔案列表，請查看 repository 內容。
+
+## Compile and Run
+
+1. 編譯單一檔案（以 `p012.java` 為例）：
+
+```
+javac -d out code\practice\p012.java
+java -cp out p012
+```
+
+2. 編譯整個 `code` 資料夾（簡單示範）：
+
+```
+javac -d out code\**\*.java
 ```
