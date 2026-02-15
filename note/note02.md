@@ -1,15 +1,3 @@
-```java
-public class HelloWorld {
-  public static void main(String[] args) {
-    System.out.println("Hello World!");
-  }
-}
-```
-
-`System` 為標準類別，`out` 是 `System` 的靜態成員，指向一個 `PrintStream` 實例。
-
----
-
 # Static vs Instance
 
 `static` 表示類別載入時即存在（存放於 Method Area），無須建立物件即可存取；適合無狀態（stateless）或共用資源。

@@ -1,4 +1,4 @@
-## Streams, Lambda, and Generics
+# Streams, Lambda, and Generics
 
 ```java
 Arrays.stream(arr3).forEach(n -> System.out.printf("%d ", n));
