@@ -4,14 +4,12 @@ public class Test {
     s.age = 20;
     s.name = "Yili";
     s.grade = 5;
-
-    System.out.println(s.name + ", " + s.age + ", " + s.grade);
+    System.out.println(String.format("%s, %d, %d", s.name, s.age, s.grade));
 
     Teacher t = new Teacher();
     t.name = "adsf";
     t.age = 19;
     t.subject = "afdadfa";
-
-    System.out.println(t.name + ", " + t.age + ", " + t.subject);
+    System.out.println(String.format("%s, %d, %s", t.name, t.age, t.subject));
   }
 }

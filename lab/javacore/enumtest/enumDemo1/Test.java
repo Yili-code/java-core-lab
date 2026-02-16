@@ -12,6 +12,7 @@ public class Test {
       case OUT_FOR_DELIVERY -> System.out.println("Out For Delivery.");
       case DELIVERED -> System.out.println("Delivered.");
       case CANCELLED -> System.out.println("Cancelled.");
+      default -> System.out.println("Unknown state.");
     }
   }
 }

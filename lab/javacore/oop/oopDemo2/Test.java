@@ -9,8 +9,8 @@ public class Test {
     Student s2 = new Student();
     s2.name = "Two";
     s2.age = 19;
-    
-    System.out.println(s1.name + ", " + s1.age + ", " + s1.teachername + ", " + s1.region);
-    System.out.println(s2.name + ", " + s2.age + ", " + s2.teachername + ", " + s2.region);
+
+    System.out.println(String.format("%s, %d, %s, %s", s1.name, s1.age, s1.teachername, s1.region));
+    System.out.println(String.format("%s, %d, %s, %s", s2.name, s2.age, s2.teachername, s2.region));
   }
 }

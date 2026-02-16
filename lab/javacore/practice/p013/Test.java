@@ -2,24 +2,17 @@
 package lab.javacore.practice.p013;
 
 public class Test {
+
+  private static void runEmployee(String name, int salary, Employee emp) {
+    emp.setName(name);
+    emp.setSalary(salary);
+    emp.eat();
+    emp.work();
+    System.out.println();
+  }
+
   public static void main(String[] args) {
-    Chef c = new Chef();
-    c.setName("first person");
-    c.setSalary(123123);
-
-    // call eat() which prints its own message
-    c.eat();
-    c.work();
-
-    System.out.println();
-
-    Manager m = new Manager();
-    m.setName("mana");
-    m.setSalary(456456);
-    
-    m.eat();
-    m.work();
-
-    System.out.println();
+    runEmployee("first person", 123123, new Chef());
+    runEmployee("mana", 456456, new Manager());
   }
 }
