@@ -1,4 +1,6 @@
 // javabean
+package lab.javacore.oop.oopDemo1;
+
 public class Student {
     // private member variables
     private String name;

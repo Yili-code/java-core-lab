@@ -1,6 +1,6 @@
 package lab.javacore.oop.oopDemo5;
 
-public class ThirdGenerationPhone extends SecondGenerationPhone{
+public class ThirdGenerationPhone extends SecondGenerationPhone {
   @Override
   public void call() {
     System.out.println("Third generation call.");

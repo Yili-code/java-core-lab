@@ -1,6 +1,6 @@
 package lab.javacore.practice.p013;
 
-public class Chef extends Employee{
+public class Chef extends Employee {
   // Constructor
   Chef() {
   }

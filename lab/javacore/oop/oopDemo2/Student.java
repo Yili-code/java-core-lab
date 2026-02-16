@@ -1,3 +1,5 @@
+package lab.javacore.oop.oopDemo2;
+
 public class Student {
   
   // 辨別數值是獨有還是共享的

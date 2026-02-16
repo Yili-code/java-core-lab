@@ -1,3 +1,5 @@
+package lab.javacore.oop.oopDemo4;
+
 public class Person {
   String name;
   int age;

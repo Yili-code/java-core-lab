@@ -1,6 +1,6 @@
 package lab.javacore.practice.p013;
 
-public class Manager extends Employee{
+public class Manager extends Employee {
   private int manageBonus;
 
   // constructor

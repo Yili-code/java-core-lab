@@ -1,3 +1,5 @@
+package lab.javacore.oop.oopDemo4;
+
 public class Test {
   public static void main(String[] args) {
     Student s = new Student();
