@@ -1,45 +1,57 @@
 # Streams, Lambda, and Generics
 
+## Table of Contents
+
+1. [Stream API Example](#stream-api-example)
+2. [Array vs Stream](#array-vs-stream)
+3. [Generics and Auto-boxing](#generics-and-auto-boxing)
+4. [Summary](#summary)
+
+---
+
+## Stream API Example
+
 ```java
 Arrays.stream(arr3).forEach(n -> System.out.printf("%d ", n));
 ```
 
-利用 Java Stream API 將 array `arr3` 封裝唯一個具備延遲求值特性的 Stream Object，並透過 Internal Iteration mechanism，將一個符合 Consumer functional interface 規範的 lambda expression 應用於 Stream 中的每個元素，最終在準輸出執行具格式化的 terminal operation.
+This wraps the array `arr3` in a **Stream** with **lazy evaluation**, uses **internal iteration**, and applies a **lambda** that conforms to the `Consumer` functional interface to each element, then performs a **terminal operation** (formatted print to standard output).
 
-`Arrays.stream(T[] array)`：將陣列 `array` 轉為 `stream`，轉化為一個具備函數編程能力的序列化元素流 `Sequence of Elements` ；若 `array` 為 `int[]`，回傳 `IntStream`，這是針對 primitive 的特殊化（primitive specialization），可以避免大量 auto-boxing 的效能損耗。
+- **`Arrays.stream(T[] array)`** — Converts an array into a `Stream` (a sequence of elements with functional-style operations). For `int[]`, it returns **`IntStream`** (primitive specialization), avoiding repeated auto-boxing and improving performance.
+- **`forEach(n -> System.out.printf("%d ", n))`** — `forEach` requires a **`Consumer<T>`** (accepts one argument, returns void). The compiler uses **type inference** to compile the lambda as an implementation of `Consumer`.
 
-`forEach(n -> System.out.printf("%d ", n));` forEach 規定參數必須是一個 `Consumer` (有輸入沒輸出)，在 Compiler 進行檢查 型別斷定(Type Inference) 後就會將其編譯為 Consumer interface 的實作
+---
 
-## Array 與 Stream
+## Array vs Stream
 
-`Array` -> Data Structure
+| Concept | Array | Stream |
+|--------|--------|--------|
+| **Role** | Data structure | Computational pipeline: declarative processing and transformation |
+| **Mutability** | Elements can be modified by index (side effects) | Functional: transformations return a **new** stream; the original source is not modified. Important for concurrency. |
 
-`Stream` -> Comutational Pipeline，負責對資料進行聲明式的處理與轉換
+---
 
-### Mutablility vs. Immutability
+## Generics and Auto-boxing
 
-`Array` -> 可以直接修改特定引索的值，具有 side effects
+- **Generics** provide parameterized types (e.g. `List<T>`), giving **compile-time type safety** and reducing explicit casts.
+- Java generics use **type erasure** at runtime, so **generic type parameters cannot be primitive types** (e.g. `int`).
 
-`Stream` -> 函數式。所有的轉換都會回傳一個新的 Stream，而不會更動原本的資料源，對於 Concurrency 極為重要。
+To use primitives in generic containers, Java **boxes** them into wrapper classes (e.g. `int` ↔ `Integer`). The compiler handles **auto-boxing** and **unboxing**.
 
-## Generics 與 Auto-boxing
-
-Java 的泛型（Generics）提供參數化型別（如 `List<T>`），可以在編譯期提供型別安全並減少顯式轉型。但 Java 的泛型在執行期採用型別擦除（type erasure），因此泛型參數不能是 primitive types（如 `int`）。
-
-為了在泛型容器中使用原始型別，Java 需要將原始型別封箱（boxing）成對應的包裝類別（wrapper class，例如 `int` ↔ `Integer`），這個過程編譯器會自動處理（auto-boxing / unboxing）。
-
-範例：
+**Example:**
 
 ```java
-// 錯誤：泛型不能使用原始型別
-List<int> list = new ArrayList<>(); 
+// Error: generics do not allow primitive types
+List<int> list = new ArrayList<>();
 
-// 正確：使用包裝類別
+// Correct: use wrapper class
 List<Integer> list = new ArrayList<>();
 ```
 
-### 物件標頭（Object Header）
-物件在 Heap 中會有額外表頭（例如 Mark Word、Klass Pointer），而 primitive 值通常直接儲存在變數或陣列中。封箱會將 primitive 包成物件並放到 Heap，會帶來額外記憶體與效能成本。
+### Object Header and Boxing Cost
 
-### 小結
-- 若對效能敏感且需大量原始型別操作，可優先使用 primitive-specialized APIs（如 `IntStream`）或維持原生陣列，避免不必要的封箱/拆箱。
+Objects in the heap have an **object header** (e.g. Mark Word, Klass pointer). Primitives can be stored directly in variables or arrays. Boxing stores a primitive inside an object on the heap, adding memory and performance cost.
+
+### Summary
+
+- For performance-sensitive code with many primitive operations, prefer **primitive-specialized APIs** (e.g. `IntStream`) or plain arrays to avoid unnecessary boxing/unboxing.

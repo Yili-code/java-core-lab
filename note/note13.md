@@ -1,47 +1,76 @@
 # Inheritance
 
-繼承是一種機制，允許一個類別（Subclass / 子類）繼承另一個類別（Superclass / 父類）的屬性與方法，藉此達成程式碼複用（Code Reuse）與建立類別層級結構
+**Inheritance** is a mechanism that allows a class (subclass / child class) to inherit the attributes and methods of another class (superclass / parent class), enabling **code reuse** and building a **class hierarchy**.
 
+---
+
+## Table of Contents
+
+1. [Core Syntax](#core-syntax)
+2. [Core Characteristics](#core-characteristics)
+3. [Use Cases](#use-cases)
+4. [Keywords Summary](#keywords-summary)
+5. [Design Guidelines](#design-guidelines)
+6. [Appendix: Memory & Tools](#appendix-memory--tools)
+
+---
 
 ## Core Syntax
 
-`extends` (加在後面)
+Use the `extends` keyword (placed after the class name):
 
 ```java
 public class Student extends Person {}
 ```
 
+- Only one superclass is allowed per class (single inheritance).
+- If no `extends` clause is written, the class implicitly extends `Object`.
+
+---
 
 ## Core Characteristics
 
-1. Java 僅支持單一繼承 (Single Inheritance)，避免了 C++ 中的鑽石問題 (Diamond Problem)，但支持多層繼承 (直接父類、間接父類)
+### 1. Single Inheritance
 
-2. 子類可以覆寫 (Override) 父類的方法，以提供更具體的實現 -> `@Override` (大寫)
+- Java supports **single inheritance** only: a class can extend at most one superclass.
+- This avoids the **diamond problem** found in C++ (multiple inheritance ambiguity).
+- **Multi-level inheritance** is allowed: a subclass can have a direct parent, and that parent can have its own parent (e.g. `Student extends Person`, `Person extends Object`).
 
-- override 的 method name, parameters 需相同
+### 2. Method Overriding
 
-- subclass 的 permission 需大於等於 superclass
+A subclass can **override** a superclass method to provide a more specific implementation.
 
-- `final` 修飾的方法和類別不能被 inheritance 及 override
+- Use the `@Override` annotation (capital O) for clarity and compile-time checks.
+- **Rules for overriding:**
+  - Method name and parameter list must match the superclass method.
+  - The subclass method’s access modifier must be **at least as visible** as the superclass method:  
+    `private` &lt; (package-private) &lt; `protected` &lt; `public`.
+  - Methods or classes marked `final` cannot be overridden or extended.
+  - Members that are `final`, `static`, or `private` are not overridable and may not be directly accessed by the subclass (e.g. `private` is hidden, not inherited for direct access).
 
-- `final`、`static`、`private` 修飾的成員無法被 subclass 繼承存取
+### 3. The Root Class: `Object`
 
+- Every class ultimately inherits from `Object`.
+- `public class A extends Object {}` is equivalent to `public class A {}`.
 
-3. 頂級父類 Object
-`public class A extends Object` (等同於 `public class A {}`)
+### 4. The `super` Keyword
 
+`super` is used to refer to the superclass when there are name clashes or when you need to call superclass members or constructors.
 
-4. `super` 用於跳過 local variable、member variable，直接去 superclass 找 value
+**Resolving name clashes (variable lookup order):**
 
-當存在重名變數時
 ```java
-System.out.println(name);          // local variable
-System.out.println(this.name);     // member variable
-System.out.println(super.name);    // superclass variable
+System.out.println(name);       // 1. local variable
+System.out.println(this.name);  // 2. current class (subclass) member
+System.out.println(super.name); // 3. superclass member
 ```
 
-5. Superclass 中的 constructor 不能被 subclass inheritance
-(因為 constructor name 必須與 class name 相同)
+### 5. Constructors Are Not Inherited
+
+- Constructors are **not inherited** by subclasses (constructor names must match the class name).
+- The subclass must define its own constructors and typically call a superclass constructor via `super(...)`.
+
+**Example: calling superclass constructors**
 
 ```java
 Student s = new Student("Yili", 22);
@@ -59,7 +88,7 @@ public class Student extends Person {
 public class Person {
   String name;
   int age;
-  
+
   public Person() {}
   public Person(String name, int age) {
     this.name = name;
@@ -68,54 +97,124 @@ public class Person {
 }
 ```
 
-6. `this` 
+### 6. `this()` vs `super()` in Constructors
 
-  - 如果 subclass 中有多個 contructor，不能用 `this()` 互相調用，需要預留一個調用 superclass 的 contructor
+- If a subclass has multiple constructors, they can call each other via `this(...)`, but **at least one** constructor must eventually call `super(...)` (explicitly or implicitly).
+- If a constructor uses `this(...)` to delegate to another constructor, it must **not** also call `super(...)`; the other constructor is responsible for calling `super(...)`.
 
-  - 如果 constructor 中寫上 `this()` ，就不能再寫 `super()`
+### 7. Inheritance vs Invocation
 
+| Concept | Behavior |
+|--------|-----------|
+| **Constructors** | Not inherited; use `super(...)` to invoke a superclass constructor. |
+| **Member variables** | Inherited (except `private` is hidden). Subclass can use inherited non-`private` fields directly. |
+| **Private members** | Not directly accessible in subclass; use public/protected getters/setters if provided. |
 
+**Example:**
 
-## 使用場景 
+- Inherited, non-private: `s.age = 24;`
+- Private in superclass: use accessor, e.g. `s.setAge(24);`
 
-多個 class 中都有相同的部分，比如說 Teacher class 和 Student class 都有 name、age 和 eat() 方法。
+### 8. Memory Layout (Object Creation)
+
+When a subclass object is created, the JVM allocates space for both superclass and subclass fields. Superclass “part” is conceptually laid out before the subclass part.
+
+```java
+public class Person {
+  String name;
+  int age;
+}
+public class Student extends Person {
+  String grade;
+}
+
+public class Test {
+  public static void main(String[] args) {
+    Student stu = new Student();
+    System.out.println(stu);
+    stu.name = "Yi";
+    stu.age = 20;
+    stu.grade = "5";
+    System.out.println(stu.name + stu.age + stu.grade);
+  }
+}
+```
+
+**Rough flow:**
+
+- **Stack:** `main` frame holds local variable `stu` (reference).
+- **Heap:** One object containing both `Person` fields (`name`, `age`) and `Student` fields (`grade`).
+- **Method area:** Class metadata for `Test`, `Person`, `Student` (e.g. method info). Superclass is loaded before subclass.
+
+**Variable lookup:** When resolving a member (e.g. for assignment), the JVM looks in the subclass first, then the superclass, following the inheritance chain.
+
+### 9. Virtual Methods (Dynamic Dispatch)
+
+- Methods that are **not** `private`, `static`, or `final` can be overridden and are subject to **dynamic dispatch**: the actual method run is determined by the **runtime type** of the object, not the reference type.
+- This is the basis of polymorphism: a superclass reference can refer to a subclass object and call the overridden method of the subclass.
+
+### 10. Space–Time Trade-off
+
+- Storing frequently used logic in a **shared superclass** (or utility) avoids duplication and can improve maintainability; the “cost” is the inheritance hierarchy and understanding the flow of execution. This is a form of “space for time” (or “structure for reuse”) in design.
+
+---
+
+## Use Cases
+
+Use inheritance when **multiple classes share common attributes and behavior**. Extract the common part into a superclass and let specific classes extend it.
+
+**Example:** `Teacher` and `Student` both have `name`, `age`, and `eat()`. Extract these into a `Person` superclass.
 
 ```java
 // Superclass
 public class Person {
   String name;
   int age;
+
   public void eat() {}
 }
 
 // Subclass
 public class Student extends Person {
   String grade;
+
   public void study() {}
 }
 
-// Subclass 
+// Subclass
 public class Teacher extends Person {
   String subject;
+
   public void teach() {}
 }
 ```
 
-## Key word
+---
 
-1. Reuse 
+## Keywords Summary
 
-2. Extends
+| Keyword / Concept | Role |
+|-------------------|------|
+| **Reuse** | Inheritance enables code reuse via shared superclass code. |
+| **extends** | Declares that a class inherits from another class. |
+| **Override** | Subclass provides its own implementation of a superclass method. |
+| **super** | Access superclass members or call superclass constructors. |
+| **private** | Members are not directly visible to subclasses; use accessors if needed. |
+| **variable.show()** | Polymorphism: the method invoked depends on the actual object type (e.g. `variable` may be a subclass instance). |
 
-3. Override
+---
 
-4. super
+## Design Guidelines
 
+1. **Draw from bottom to top:** Identify concrete classes first, then group common features and introduce a superclass above them.
+2. **Extract commonality:** Find shared attributes and methods; put them in a superclass.
+3. **Implement superclass first:** Define and stabilize the parent class before writing subclasses that depend on it.
 
-## How to build connection
+---
 
-1. 由下往上畫
+## Appendix: Memory & Tools
 
-2. 分類並抽取共性
+### Viewing JVM processes and heap
 
-3. 先寫 superclass
+- **List Java processes:** `jps`
+- **HSDB (Heap and System Debugger):** `jhsdb hsdb` — attach to a JVM to inspect memory layout, threads, and objects (advanced debugging).

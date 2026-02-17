@@ -1,66 +1,79 @@
-# Stack 與 Heap（堆疊與堆）
+# Stack and Heap
 
-## Stack（堆疊）
+**Stack** and **Heap** are the two main memory regions used by the JVM for method execution and object storage.
 
-- 管理者：由作業系統與執行緒自動分配與釋放（每個執行緒有自己的 stack）。
+---
 
-- 結構：遵循 LIFO（後進先出），以 stack frame 為單位保存函式呼叫時的參數、區域變數、回傳位址等。
+## Table of Contents
 
-- 存放：原始型別值（primitives）與物件參考（references）。在 Java 中，變數本身（例如 `User user`）儲存的是參考，物件實體位於 Heap。
+1. [Stack](#stack)
+2. [Heap](#heap)
+3. [Code Example](#code-example)
+4. [Practical Considerations](#practical-considerations)
+5. [Common Memory Issues](#common-memory-issues)
+6. [Summary](#summary)
 
-- 特性：存取速度快、配置開銷低、碎片化風險小；但大小固定且有限（每個執行緒的 stack size 有上限）。
+---
 
-- 生命週期：隨方法/函式返回自動釋放。
+## Stack
 
-## Heap（堆）
+| Aspect | Description |
+|--------|-------------|
+| **Management** | Allocated and freed automatically by the OS/thread (each thread has its own stack). |
+| **Structure** | **LIFO** (Last In, First Out); each **stack frame** holds method parameters, local variables, return address, etc. |
+| **Contents** | Primitive values and **object references**. In Java, a variable such as `User user` holds a reference; the actual object lives on the **Heap**. |
+| **Characteristics** | Fast access, low allocation cost, little fragmentation; size is fixed and limited (per-thread stack size has an upper limit). |
+| **Lifecycle** | Freed automatically when the method returns. |
 
-- 管理者：由執行環境（在 Java 中為 JVM）管理，透過 `new` 分配，並由 GC（Garbage Collector）回收。
+---
 
-- 存放：物件實體與陣列（objects and arrays）。
+## Heap
 
-- 特性：空間彈性較大（受 JVM/系統設定限制），但分配與回收成本較高，可能產生記憶體碎片與較慢的存取延遲。
+| Aspect | Description |
+|--------|-------------|
+| **Management** | Managed by the JVM; allocated with `new`, reclaimed by the **Garbage Collector (GC)**. |
+| **Contents** | Object instances and arrays. |
+| **Characteristics** | Larger, flexible space (within JVM/system limits); higher allocation and GC cost; possible fragmentation and higher access latency. |
+| **Lifecycle** | Determined by references and GC; objects are reclaimed when no strong references and no other reachable paths exist. |
 
-- 生命週期：由引用關係與 GC 決定；無強引用且無其他可達路徑時，物件才會被回收。
+---
+
+## Code Example
 
 ```java
 public void myMethod() {
-    int age = 22;              // 原始型別，值儲存在 stack frame
-    User user = new User();    // 變數 `user`（reference）在 stack，物件實體在 heap
+    int age = 22;              // Primitive: value stored in stack frame
+    User user = new User();    // Variable `user` (reference) on stack; object on heap
 }
 ```
 
-`age` 儲存整數值於 stack。
+- **`age`** — Integer value stored on the stack.
+- **`new User()`** — Creates an object on the heap and returns a reference.
+- **`user`** — Holds the reference to that heap object.
 
-`new User()` 在 heap 建立物件並回傳 reference。
+---
 
-`user` 儲存對 heap 上物件的 reference。
+## Practical Considerations
 
+- **Object allocation cost:** Frequent creation of short-lived objects increases GC pressure and can hurt performance. Consider object reuse, pooling, or using primitives to reduce allocations.
+- **Memory limits:** Use JVM options such as **`-Xms`** / **`-Xmx`** to control heap size, and **`-Xss`** for per-thread stack size.
 
-## 實務與效能考量
+---
 
-- 物件分配成本：頻繁在 heap 建立短命物件會增加 GC 壓力，影響效能；可用物件重用、緩衝或使用原始型別減少分配次數。
+## Common Memory Issues and Prevention
 
-- 記憶體限制：調整 JVM 參數（如 `-Xms`/`-Xmx`）以控制 heap 大小；注意每個執行緒的 stack size（如 `-Xss`）。
+| Issue | Causes / Patterns |
+|-------|-------------------|
+| **OOM (OutOfMemoryError)** | Heap exhausted by many reachable objects, **memory leaks** (e.g. long-lived collections, static holders, uncleaned `ThreadLocal`), or insufficient heap size. |
+| **Leak patterns** | Static collections holding references; listeners not removed; resources not closed; long-lived `ThreadLocal` not cleared. |
+| **Prevention** | Use **weak references** (`WeakReference`), limit cache size, clean up long-lived data, and test under load (unit/integration tests). |
 
+---
 
-## 常見記憶體問題與預防
+## Summary
 
-- OOM（OutOfMemoryError）：通常因為 heap 被大量可達物件佔用、記憶體洩漏（例如長生存期的集合、靜態容器、ThreadLocal 未清理）或配置不足所致。
-
-- 記憶體洩漏模式：靜態集合持有參考、監聽器未移除、資源未關閉、長時間 ThreadLocal。
-
-- 預防措施：使用弱引用（`WeakReference`）、限制快取大小、主動清理長生存物件、寫單元/整合測試模擬高負載場景。
-
-## 小結
-
-- Stack：快速、生命週期短、儲存原始值與參考。適合短期、頻繁的本地運算。
-
-- Heap：彈性大、由 GC 管理、儲存物件實體。需關注分配頻率與回收策略以避免效能或記憶體問題。
-
-- stack, heap, method: 
-
--- stack: method 被調用進 stack 執行，當執行完畢自動釋放
-
--- heap: new
-
--- method: 相關字節碼文件 (class)存儲
+| Region | Role |
+|--------|------|
+| **Stack** | Fast, short-lived; holds primitives and references. Suited for local, frequent computation. |
+| **Heap** | Large, GC-managed; holds object instances. Watch allocation rate and GC behavior to avoid performance or OOM issues. |
+| **Method area** | Stores class metadata (e.g. bytecode). Methods are loaded and executed from here; when a method is invoked, a frame is pushed onto the **stack**; objects created with **`new`** go on the **heap**. |

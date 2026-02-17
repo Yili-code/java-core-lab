@@ -1,31 +1,47 @@
 # Encapsulation
 
-將資料（屬性）與操作資料的方法（行為）綑綁在一起的機制，並對外部隱藏物件的內部實作細節，僅透過受控的介面（Interface）進行存取。
+**Encapsulation** is the practice of **bundling data** (fields) with the **operations** that use them (methods) and **hiding internal implementation details** from the outside. Access is only through a **controlled surface** (e.g. public methods or getters/setters).
 
-在後端開發的語境下，封裝就是建立一個「黑盒子」，外部使用者不需要知道內部的運作邏輯，只需要知道如何呼叫 API 或方法
+In backend development, encapsulation is like building a **black box**: callers do not need to know how the object works internally; they only need to know how to call the API or methods.
+
+---
+
+## Table of Contents
+
+1. [Access Modifiers](#access-modifiers)
+2. [Why Encapsulation Matters for Backend Engineers](#why-encapsulation-matters-for-backend-engineers)
+3. [Summary](#summary)
+
+---
 
 ## Access Modifiers
 
-定義可見性的四個層級
+Java defines **four levels of visibility** (from most to least restrictive):
 
-`private` 僅限 class 內部 access 
-`default` 僅限同一 package access
-`protected` 允許同 package 以及所有 subclasses access
-`public` 對全世界開放
+| Modifier | Visibility |
+|----------|------------|
+| **private** | Only within the **same class**. |
+| **default** (package-private) | Only within the **same package** (no modifier written). |
+| **protected** | Same package **and** all **subclasses** (even in other packages). |
+| **public** | Visible **everywhere**. |
 
+Use the most restrictive modifier that still allows the intended access; prefer **private** for fields and expose behavior through methods.
 
-## 為什麼封裝對後端工程師至關重要？
+---
 
-1. Maintainability
+## Why Encapsulation Matters for Backend Engineers
 
-修改了內部的資料結構（例如將 List 改為 Set），只要對外的 Getter/Setter 或方法簽章（Method Signature）不變，所有調用該類別的代碼都不需要更動
+| Benefit | Description |
+|---------|-------------|
+| **Maintainability** | If you change internal representation (e.g. replace `List` with `Set`), callers are unaffected as long as the **public method signatures** (and contract) stay the same. |
+| **Validation** | Setters (or dedicated methods) let you add **validation and business rules** when data is assigned (e.g. range checks, null checks, invariants). |
+| **Read-only access** | Expose only **getters** (no setters) so the object appears **read-only** from the outside. This supports **immutability** and is useful in **concurrent programming** (fewer shared mutable state issues). |
+| **API stability** | Internal details can evolve without breaking clients; the public surface remains the contract. |
 
+---
 
-2. Validation
+## Summary
 
-封裝允許你在賦值時加入邏輯
-
-
-3. Read-only Access
-
-可以只提供 Getter 而不提供 Setter，使該物件在外部看來是「唯讀」的，這對於併發編程（Concurrent Programming）中的不可變性 (Immutability) 非常有幫助
+- **Encapsulation** = data + behavior in one unit; hide internals; expose a controlled API.
+- Use **access modifiers** to enforce boundaries; prefer **private** fields and public methods.
+- Encapsulation improves **maintainability**, **validation**, **read-only views**, and **concurrency-friendly** design.

@@ -1,21 +1,43 @@
-# Static
+# static
 
-static variable，被該 class 的所有 object 共享
-
-1. 靜態方法只能訪問靜態變量與其他靜態方法
-
-2. 非靜態方法可以訪問所有
-
-3. 靜態方法沒有 this 
-
-4. static 隨 class 加載而加載， 優先於 object。
-
-5. 非靜態等到 object 後才存在
+**Static** members belong to the **class**, not to individual instances. They are shared by all objects of that class and are loaded when the class is loaded (typically stored in the Method Area).
 
 ---
 
-`public static void main(String[] args)`
+## Table of Contents
 
-public 訪問權限最大，JVM 在任何地方都可以調用
+1. [Rules](#rules)
+2. [main Method](#main-method)
+3. [Summary](#summary)
 
-static 可以直接用 class 進行訪問，測試類中其他方法也是靜態
+---
+
+## Rules
+
+| Rule | Description |
+|------|-------------|
+| **1** | Static methods can only access **static** variables and other **static** methods (they cannot directly access instance members). |
+| **2** | Instance (non-static) methods can access **both** static and instance members. |
+| **3** | Static methods have **no `this`** reference (there is no current object). |
+| **4** | Static members are loaded with the **class** and exist **before** any object is created. |
+| **5** | Instance members exist only **after** an object is created. |
+
+---
+
+## main Method
+
+```java
+public static void main(String[] args)
+```
+
+| Modifier | Meaning |
+|----------|---------|
+| **public** | Maximum visibility so the JVM can invoke it from anywhere. |
+| **static** | Invoked on the class without creating an instance; other methods in the same class used for testing are often static as well so they can be called without an object. |
+
+---
+
+## Summary
+
+- **static** = class-level, shared, no `this`, loaded with the class.
+- **non-static** = instance-level, per object, has `this`, created with the object.

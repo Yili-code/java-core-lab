@@ -1,11 +1,30 @@
 # Namespace Management
 
-命名空間 (Namespace)：一種用於隔離標識符（Identifiers，如類別名、函數名、變數名）的容器機制。它透過建立虛擬的邊界，確保在同一系統中，即使名稱相同的 Entities也能因隸屬不同空間而共存，從而解決 Naming Collision。
+A **namespace** is a mechanism for **isolating identifiers** (e.g. class names, method names, variable names). It creates a logical boundary so that entities with the same name can coexist in different namespaces, avoiding **naming collisions**.
 
-## Why we need it ?
+---
 
-1. Uniqueness
+## Table of Contents
 
-2. Access Control Boundary
+1. [Why We Need It](#why-we-need-it)
+2. [In Java](#in-java)
 
-3. Search Optimization
+---
+
+## Why We Need It
+
+| Benefit | Description |
+|---------|-------------|
+| **Uniqueness** | Same names can be used in different packages or scopes without conflict. |
+| **Access control boundary** | Visibility rules (e.g. package-private) are defined relative to packages and classes. |
+| **Search optimization** | Compiler and JVM can resolve symbols efficiently within a well-defined scope. |
+
+---
+
+## In Java
+
+- **Packages** (`package com.example.app`) provide the primary namespace for classes.
+- **Classes** form a scope for static and instance members.
+- **Methods** form a scope for local variables and parameters.
+
+Combined, they give uniqueness, access control, and clear resolution order for identifiers.

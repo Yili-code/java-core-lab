@@ -1,11 +1,67 @@
 # Interface
 
-介面是一種完全抽象的類別，定義了類別「能做什麼」(Capabilities)，而非「是什麼」。它是物件與物件之間的Contract
+An **interface** is a **fully abstract** contract that defines **what an object can do** (its capabilities), not what it **is**. It acts as an agreement between the caller and the implementation.
 
-一個類別可以實現多個介面，這補足了單一繼承的不足。
+- A class can **implement multiple interfaces**, which compensates for Java’s **single inheritance** (only one superclass).
+- The **Interface Segregation Principle** (from SOLID) recommends designing focused interfaces rather than large, monolithic ones — important for clear and maintainable APIs.
 
-「物件導向設計原則」(SOLID) 裡的介面隔離原則 (Interface Segregation) 是設計高品質 API 的準則
+---
 
-## 「抽象類別與介面到底有什麼本質上的區別？」
+## Table of Contents
 
-抽象類別是關於「物件的身份 (Identity)」，而介面是關於「物件的能力 (Behavior)」
+1. [Core Idea](#core-idea)
+2. [Abstract Class vs Interface (Essential Difference)](#abstract-class-vs-interface-essential-difference)
+3. [When to Use Which](#when-to-use-which)
+4. [Example](#example)
+5. [Summary](#summary)
+
+---
+
+## Core Idea
+
+- **Interface** = contract: method signatures (and optionally default/static methods), no instance state.
+- **Implements** = the class guarantees it provides those methods; callers depend on the interface type.
+
+---
+
+## Abstract Class vs Interface (Essential Difference)
+
+| Focus | Abstract class | Interface |
+|-------|----------------|-----------|
+| **Identity** | “What the object **is**” — part of a class hierarchy with shared state and behavior. | “What the object **can do**” — a set of capabilities (behavior only). |
+| **State** | Can have fields, constructors, and shared implementation. | No instance fields (only `public static final` constants traditionally). |
+| **Inheritance** | Single: one abstract (or concrete) superclass. | Multiple: a class can implement many interfaces. |
+
+**Rule of thumb:** Use an **abstract class** when you care about **identity and shared implementation**; use an **interface** when you care about **behavior and multiple contracts**.
+
+---
+
+## When to Use Which
+
+- **Interface** — Multiple unrelated classes need to support the same capability (e.g. `Comparable`, `Serializable`); API boundaries; dependency injection and testing.
+- **Abstract class** — Several classes share a lot of code and a clear “is-a” relationship; you need shared fields or constructors.
+
+---
+
+## Example
+
+```java
+public interface Drawable {
+    void draw();
+}
+
+public class Circle implements Drawable {
+    @Override
+    public void draw() { /* ... */ }
+}
+
+// Another class can also implement Drawable and other interfaces
+public class Button implements Drawable, Clickable { }
+```
+
+---
+
+## Summary
+
+- **Interface** = contract (capabilities); **abstract class** = template (identity + shared code).
+- Prefer **small, focused interfaces** (Interface Segregation) for better API design.

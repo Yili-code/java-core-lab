@@ -1,31 +1,49 @@
-# Static vs Instance
+# Static vs Instance, GC, and Singleton
 
-`static` 表示類別載入時即存在（存放於 Method Area），無須建立物件即可存取；適合無狀態（stateless）或共用資源。
+## Table of Contents
 
-`實例化（instantiate）`：將類別轉為記憶體中的物件，頻繁建立物件會增加 GC 次數，可能影響效能。
-
-Thread Safety
-- Static：若多執行緒同時修改共用靜態資料，可能產生競爭條件（Race Condition）。
-- Instance：每個執行緒通常操作自己的物件狀態，隔離性較好，但較耗記憶體。
-
----
-
-# GC（Garbage Collection）
-GC 會回收不再被引用的 Heap 物件。GC 運作時有時會觸發 Stop-The-World（STW），短暫暫停應用執行以清理記憶體，需注意延遲與吞吐量折衷。
+1. [Static vs Instance](#static-vs-instance)
+2. [Garbage Collection (GC)](#garbage-collection-gc)
+3. [Singleton Pattern](#singleton-pattern)
+4. [Double-Checked Locking (DCL)](#double-checked-locking-dcl)
+5. [Stack vs Heap (Summary)](#stack-vs-heap-summary)
 
 ---
 
-# Singleton Pattern
-確保一個類別在整個應用生命週期只有一個實例。
+## Static vs Instance
 
-優點：集中資源管理（例如連線池）、可以延遲初始化（lazy initialization）、容易在不同環境替換實作（介面導向）。
+- **`static`** — Members exist when the **class** is loaded (stored in the **Method Area**). They can be accessed without creating an object; suitable for stateless or shared resources.
+- **Instance (instantiate)** — Creating an **object** from a class in memory. Creating many short-lived objects increases GC activity and can affect performance.
+
+### Thread Safety
+
+| Type | Behavior |
+|------|----------|
+| **Static** | Shared across all instances and threads. If multiple threads modify static data without synchronization, **race conditions** can occur. |
+| **Instance** | Each thread often works with its own object; better isolation but higher memory usage. |
 
 ---
 
-# Double-Checked Locking（DCL）
-在多執行緒環境下常用於懶載入單例，但需要正確的同步與記憶體可見性（`volatile` 在 Java 中通常是必要的）。
+## Garbage Collection (GC)
 
-範例（簡化）：
+- GC reclaims **heap objects** that are no longer reachable (no references).
+- During collection, GC may trigger **Stop-The-World (STW)**, briefly pausing the application. Tuning involves balancing **latency** and **throughput**.
+
+---
+
+## Singleton Pattern
+
+Ensures that a class has **only one instance** throughout the application lifecycle.
+
+**Benefits:** Centralized resource management (e.g. connection pools), optional **lazy initialization**, and easier substitution of implementations (e.g. via interfaces).
+
+---
+
+## Double-Checked Locking (DCL)
+
+Often used for **lazy-initialized singletons** in multi-threaded environments. Requires correct synchronization and **memory visibility**; in Java, `volatile` on the instance field is typically necessary.
+
+**Example (simplified):**
 
 ```java
 private static volatile PaymentGateway instance;
@@ -44,9 +62,7 @@ public static PaymentGateway getInstance() {
 
 ---
 
-# Stack vs Heap
+## Stack vs Heap (Summary)
 
-- Stack：儲存方法呼叫、區域變數與基本型別，由系統自動分配與釋放，每個執行緒擁有獨立 Stack（執行緒安全）。
-- Heap：儲存物件與陣列，由 `new` 產生並由 GC 管理，為所有執行緒共用（需注意同步問題）。
-
-若 `static` 方法只使用區域變數，該方法在記憶體層級上仍是執行緒安全的，因為每個執行緒有自己的區域變數副本。
+- **Stack** — Method calls, local variables, and primitives; managed by the system; each thread has its own stack (thread-local). If a `static` method only uses local variables, it is thread-safe at the memory level because each thread has its own copy of those variables.
+- **Heap** — Objects and arrays created with `new`; managed by GC; shared by all threads (synchronization may be required).

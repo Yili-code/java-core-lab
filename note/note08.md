@@ -1,17 +1,32 @@
-# SimpleDateFormat
+# SimpleDateFormat and DateTimeFormatter
 
-text.SimpleDateFormat
+Formatting and parsing **dates** and **strings** in Java.
 
-Java text 套件中用於在 Date 物件與 String 字串之間進行雙向轉換的具體類別，允許開發者定義自定義的模式（Pattern）來呈現時間
+---
 
-## Date -> String
+## Table of Contents
+
+1. [SimpleDateFormat (Legacy)](#simpledateformat-legacy)
+2. [Thread Safety Note](#thread-safety-note)
+3. [DateTimeFormatter (Recommended)](#datetimeformatter-recommended)
+4. [Cross-API Date Conversion](#cross-api-date-conversion)
+
+---
+
+## SimpleDateFormat (Legacy)
+
+**Package:** `java.text.SimpleDateFormat`
+
+A concrete class in `java.text` for **two-way conversion** between `Date` and `String`, using a custom **pattern** (e.g. `yyyy-MM-dd HH:mm:ss`).
+
+### Date → String
 
 ```java
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 String reportTime = sdf.format(new Date());
 ```
 
-## String -> Date
+### String → Date
 
 ```java
 String input = "2026/11/25";
@@ -19,18 +34,19 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 Date birthday = sdf.parse(input);
 ```
 
-## 後端開發
-`SimpleDateFormat` -> Not Thread-Safe
+---
 
-在多執行續環境 (如 Spring Boot backend service)，如果多個 user 同時呼叫同一個 `SimpleDateFormat` instance，可能會導致日期計算錯誤或程式崩潰。
+## Thread Safety Note
 
-現已改用 `java.time.format.DateTimeFormatter` (不可變且執行緒安全的)
+**`SimpleDateFormat` is not thread-safe.**
+
+In multi-**threaded** environments (e.g. Spring Boot backend), sharing a single `SimpleDateFormat` instance across threads can cause incorrect results or failures. Prefer **`java.time.format.DateTimeFormatter`**, which is **immutable and thread-safe**.
 
 ---
 
-# DateTimeFormatter
+## DateTimeFormatter (Recommended)
 
-time.format.DataTimeFormatter
+**Package:** `java.time.format.DateTimeFormatter`
 
 ```java
 import java.time.LocalDate;
@@ -43,9 +59,13 @@ LocalDate localDate = LocalDate.parse(dataStr, DATE_FORMAT);
 Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 ```
 
-`Cross-API Date Conversion`
-Java 8 引入的「不可變、無時區日期」 `LocalDate` -> 透過系統預設時區 `ZoneId` 補完 -> 絕對時間戳記 `java.util.Date`
+---
 
+## Cross-API Date Conversion
+
+Java 8’s **`LocalDate`** is immutable and has no time zone. To convert to **`java.util.Date`** (an instant in time), you need to supply a time zone (e.g. system default) and then convert to an `Instant`.
+
+**Example: String → `LocalDate` → `Date`**
 
 ```java
 import java.time.*;

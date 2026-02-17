@@ -1,26 +1,41 @@
-# Java 工具與執行
+# Java Tools and Execution
 
-`javac main.java`：將 Java 原始碼編譯為字節碼（Bytecode），輸出 `.class` 檔案。
+**Compilation and execution** are the two main steps to run a Java program.
 
-`java main`：JVM 載入字節碼，並透過解譯或 JIT 即時編譯執行，產生對應平台的機器碼。
+- **`javac main.java`** — Compiles Java source code into **bytecode**, producing `.class` files.
+- **`java main`** — The JVM loads bytecode and runs it via interpretation and/or **JIT (Just-In-Time)** compilation, producing native machine code for the target platform.
 
-# 歷史概覽
+---
 
-- 1990s：由 James Gosling 等人在 Sun Microsystems 開發，語言原型名為 Oak，後來改名為 Java。
+## Table of Contents
 
-Java 平台簡介
+1. [Historical Overview](#historical-overview)
+2. [Java Platform Editions](#java-platform-editions)
+3. [Application Examples](#application-examples)
 
-## Java SE（Standard Edition）
-- 核心語言與標準類別庫，適合桌面與一般應用程式開發。
+---
 
-## Java ME（Micro Edition）
-- 適用於嵌入式或資源受限裝置（歷史用途），現今多被其他平台或專用韌體取代。
+## Historical Overview
 
-## Java EE / Jakarta EE（Enterprise Edition）
-- 企業級伺服器端與分散式應用的支援平台，常見於 Web 應用、微服務與企業整合。
+- **1990s:** Java was developed by James Gosling and others at Sun Microsystems. The language was initially named **Oak**, then renamed to **Java**.
 
-應用範例（示意）
-- 桌面工具與 IDE：Swing / JavaFX
-- 企業應用與微服務：Spring、Jakarta EE
-- 大數據生態：Hadoop 等部分元件使用 Java
-- 遊戲或工具：例如 Minecraft
+---
+
+## Java Platform Editions
+
+| Edition | Description |
+|--------|-------------|
+| **Java SE (Standard Edition)** | Core language and standard library; suitable for desktop and general application development. |
+| **Java ME (Micro Edition)** | Targeted at embedded and resource-constrained devices (legacy); largely superseded by other platforms or dedicated firmware. |
+| **Java EE / Jakarta EE (Enterprise Edition)** | Enterprise and distributed server-side support; common in web applications, microservices, and enterprise integration. |
+
+---
+
+## Application Examples
+
+| Domain | Examples |
+|--------|----------|
+| Desktop & IDE | Swing, JavaFX |
+| Enterprise & microservices | Spring, Jakarta EE |
+| Big data | Some components of Hadoop and related ecosystems |
+| Games & tools | e.g. Minecraft |
