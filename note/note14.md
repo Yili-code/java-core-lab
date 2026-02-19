@@ -7,8 +7,11 @@
 ## Table of Contents
 
 1. [Core Syntax](#core-syntax)
+
 2. [Static vs Dynamic Polymorphism](#static-vs-dynamic-polymorphism)
+
 3. [Why It Matters](#why-it-matters)
+
 4. [Use in Backend Development](#use-in-backend-development)
 
 ---
@@ -20,6 +23,7 @@ Parent obj = new Child();
 ```
 
 - The **compile-time type** of `obj` is `Parent` (what the compiler allows you to call).
+
 - The **runtime type** is `Child`; overridden methods are invoked based on the **actual object type** (dynamic dispatch).
 
 ---
@@ -38,7 +42,9 @@ Dynamic polymorphism is central to **extensibility**: you can add new subtypes w
 ## Why It Matters
 
 - **Extensibility** — New behavior can be added by introducing new subclasses; existing code that uses the parent type automatically benefits.
+
 - **Abstraction** — Callers depend on the abstract type (interface or parent class), not concrete implementations.
+
 - **Testability** — Dependencies can be replaced with mocks or stubs that implement the same type.
 
 ---
@@ -46,4 +52,5 @@ Dynamic polymorphism is central to **extensibility**: you can add new subtypes w
 ## Use in Backend Development
 
 - **Dependency Injection (DI)** — Frameworks (e.g. Spring) inject implementations based on interfaces or abstract types; polymorphism allows swapping implementations without changing callers.
+
 - **APIs and plugins** — Define interfaces or base classes; third-party or internal code provides concrete implementations that are used polymorphically.
