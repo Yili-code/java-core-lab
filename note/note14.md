@@ -1,56 +1,63 @@
-# Polymorphism
+# 多型（Polymorphism）
 
-**Polymorphism** means that the **same operation** (e.g. a method call) can exhibit **different behavior** depending on the actual type of the object. In Java, this is often achieved by using a **parent-type reference** that points to a **child-type object**.
-
----
-
-## Table of Contents
-
-1. [Core Syntax](#core-syntax)
-
-2. [Static vs Dynamic Polymorphism](#static-vs-dynamic-polymorphism)
-
-3. [Why It Matters](#why-it-matters)
-
-4. [Use in Backend Development](#use-in-backend-development)
+**多型**是指**同一種操作**（例如方法呼叫）能根據物件的**實際型別**表現出**不同行為**。在 Java 中，常透過**父類別型別的引用**指向**子類別型別的物件**來達成。
 
 ---
 
-## Core Syntax
+## 目錄
+
+1. [核心語法](#核心語法)
+
+2. [靜態多型 vs 動態多型](#靜態多型-vs-動態多型)
+
+3. [為什麼重要](#為什麼重要)
+
+4. [在後端開發中的應用](#在後端開發中的應用)
+
+---
+
+## 核心語法
 
 ```java
 Parent obj = new Child();
 ```
 
-- The **compile-time type** of `obj` is `Parent` (what the compiler allows you to call).
+- `obj` 的**編譯期型別**是 `Parent`（編譯器據此決定你可呼叫哪些成員）。
 
-- The **runtime type** is `Child`; overridden methods are invoked based on the **actual object type** (dynamic dispatch).
-
----
-
-## Static vs Dynamic Polymorphism
-
-| Type | Mechanism | When Resolved | Example |
-|------|-----------|----------------|---------|
-| **Static polymorphism** | **Method overloading** — same method name, different parameter lists. | **Compile time** | `println(String)` vs `println(int)` |
-| **Dynamic polymorphism** | **Method overriding** — subclass provides its own implementation of a superclass method. | **Runtime** | `Parent p = new Child(); p.doWork();` runs `Child`’s `doWork()` |
-
-Dynamic polymorphism is central to **extensibility**: you can add new subtypes without changing code that depends on the parent type.
+- **執行期型別**是 `Child`；被覆寫的方法會依**實際物件型別**來呼叫（動態派送）。
 
 ---
 
-## Why It Matters
+## 類型轉換
 
-- **Extensibility** — New behavior can be added by introducing new subclasses; existing code that uses the parent type automatically benefits.
+```java
+Person p = new Student();
+Student s = (Student)p;
+---
 
-- **Abstraction** — Callers depend on the abstract type (interface or parent class), not concrete implementations.
+## 靜態多型 vs 動態多型
 
-- **Testability** — Dependencies can be replaced with mocks or stubs that implement the same type.
+| 類型 | 機制 | 解析時機 | 範例 |
+|------|------|----------|------|
+| **靜態多型** | **方法多載（Overloading）** — 相同方法名、不同參數列表。 | **編譯期** | `println(String)` 與 `println(int)` |
+| **動態多型** | **方法覆寫（Overriding）** — 子類別提供父類別方法自己的實作。 | **執行期** | `Parent p = new Child(); p.doWork();` 會執行 `Child` 的 `doWork()` |
+
+動態多型是**擴展性**的關鍵：可在不修改依賴父類別型別的程式碼的前提下，新增子類型。
 
 ---
 
-## Use in Backend Development
+## 為什麼重要
 
-- **Dependency Injection (DI)** — Frameworks (e.g. Spring) inject implementations based on interfaces or abstract types; polymorphism allows swapping implementations without changing callers.
+- **擴展性** — 透過新增子類別加入新行為，使用父類別型別的既有程式碼無需改動即可受益。
 
-- **APIs and plugins** — Define interfaces or base classes; third-party or internal code provides concrete implementations that are used polymorphically.
+- **抽象** — 呼叫端依賴抽象型別（介面或父類別），而非具體實作。
+
+- **可測試性** — 依賴可替換為實作同一型別的 mock 或 stub。
+
+---
+
+## 在後端開發中的應用
+
+- **依賴注入（Dependency Injection, DI）** — 框架（如 Spring）依介面或抽象型別注入實作；多型讓你在不改呼叫端的情況下替換實作。
+
+- **API 與外掛** — 定義介面或基底類別；由第三方或內部程式提供具體實作，並以多型方式使用。
