@@ -28,7 +28,17 @@ Parent obj = new Child();
 
 ---
 
+## Polymorphism 好處
+
+1. Method 使用 superclass 作為參數，可以接收所有 subclass 的對象
+
+2. 根據傳遞不同對象，調用 subclass 不同 method
+
+---
+
 ## 類型轉換
+
+分成**自動類型轉換**以及**強制類型轉換**。強制類型轉換可以轉換成真正的子類類型，從而調用子類獨有的功能
 
 ```java
 Person p = new Student();
