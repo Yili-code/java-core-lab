@@ -1,62 +1,65 @@
-# Abstract Class
+# 抽象類別（Abstract Class）
 
-An **abstract class** is a class that **cannot be instantiated** directly. It serves as a **template** for subclasses and defines a contract (including optional concrete behavior and required abstract methods) that subclasses must follow.
-
----
-
-## Table of Contents
-
-1. [Core Syntax](#core-syntax)
-2. [Core Characteristics](#core-characteristics)
-3. [When to Use](#when-to-use)
-4. [Abstract Class vs Interface](#abstract-class-vs-interface)
+**抽象類別**是一種**無法直接實例化**的類別，作為子類別的**範本**，定義子類別必須遵循的合約（可選的具體行為 + 必須實作的抽象方法）。
 
 ---
 
-## Core Syntax
+## 目錄
 
-Use the **`abstract`** keyword:
+1. [核心語法](#核心語法)
+2. [核心特性](#核心特性)
+3. [適用情境](#適用情境)
+4. [抽象類別 vs 介面](#抽象類別-vs-介面)
+
+---
+
+## 核心語法
+
+使用 **`abstract`** 關鍵字宣告類別：
 
 ```java
-public abstract class BaseService {
-    // abstract and/or concrete members
-}
+public abstract class BaseService {...}
 ```
 
-- You cannot write `new BaseService()`.
-- Subclasses extend it and typically implement or override abstract methods.
+- 無法 `new BaseService()` 直接實例化。
+
+- 子類別繼承後，**必須**實作或覆寫所有抽象方法（編譯器強制，避免遺漏）。
+
+- 若某方法無法在父類別給出具體實作，則宣告為 `abstract`；**含有 abstract 方法的類別即為 abstract class**。
 
 ---
 
-## Core Characteristics
+## 核心特性
 
-| Feature | Description |
-|--------|-------------|
-| **Abstract methods** | Declared with `abstract`; no body in the abstract class; **must** be implemented by concrete subclasses. |
-| **Concrete methods** | Can have normal method bodies; subclasses may override them or use as-is. |
-| **Fields and constructors** | Abstract classes can have **member variables** and **constructors** (e.g. for shared initialization). Subclasses call `super(...)` from their constructors. |
-
----
-
-## When to Use
-
-Use an **abstract class** when:
-
-- You have a **group of closely related classes** that share a lot of code.
-- Some **core behavior** must be defined by each subclass (abstract methods).
-- You want to share **state** (fields) and **constructors** in the hierarchy.
-
-**Example:** A **BaseService** that defines common setup and lifecycle, with subclasses implementing specific business logic.
+| 特性 | 說明 |
+|------|------|
+| **抽象方法** | 以 `abstract` 宣告、無方法本體；**必須**由具體子類別實作。 |
+| **具體方法** | 可有完整方法本體；子類別可覆寫或直接使用。 abstract 類別也可沒有抽象方法（罕見）。 |
+| **欄位與建構子** | 可有**成員變數**與**建構子**（共用初始化）；子類別在建構子中呼叫 `super(...)`。 |
 
 ---
 
-## Abstract Class vs Interface
+## 適用情境
 
-| Aspect | Abstract class | Interface |
-|--------|----------------|-----------|
-| **Identity** | Describes **what the object is** (e.g. a kind of service). | Describes **what the object can do** (capabilities / contract). |
-| **State** | Can have instance fields and constructors. | No instance fields (before Java 8); only constants. |
-| **Inheritance** | Single inheritance (one superclass). | A class can implement **multiple** interfaces. |
-| **Default code** | Full method bodies, shared logic. | Default methods (Java 8+) for backward compatibility. |
+適用於**抽象類別**的情境：
 
-In short: **abstract class ≈ identity / shared implementation**; **interface ≈ contract / behavior**.
+- 有一**群密切相關的類別**，且共享大量程式碼。
+
+- 部分**核心行為**須由各子類別各自定義（抽象方法）。
+
+- 想在繼承階層中共享**狀態**（欄位）與**建構子**。
+
+**範例：** **BaseService** 定義共用設定與生命週期，子類別實作各自業務邏輯。
+
+---
+
+## 抽象類別 vs 介面
+
+| 面向 | 抽象類別 | 介面 |
+|------|----------|------|
+| **本質** | 描述**物件是什麼**（身份／種類） | 描述**物件能做什麼**（能力／合約） |
+| **狀態** | 可有實例欄位與建構子 | Java 8 前僅常數；之後可有 default 方法 |
+| **繼承** | 單一繼承（一個父類別） | 一個類別可實作**多個**介面 |
+| **共用程式碼** | 完整方法本體、共用邏輯 | default 方法（Java 8+），多用於向後相容 |
+
+**口訣：** 抽象類別 ≈ **是什麼**／共用實作；介面 ≈ **能做什麼**／合約行為。
