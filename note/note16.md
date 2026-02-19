@@ -1,67 +1,63 @@
-# Interface
+# 介面（Interface）
 
-An **interface** is a **fully abstract** contract that defines **what an object can do** (its capabilities), not what it **is**. It acts as an agreement between the caller and the implementation.
+**介面**是一種**完全抽象**的合約，定義**物件能做什麼**（能力），而非物件**是什麼**。當部分子類別有**共通能力**時，可抽成介面，讓不同類別實作同一套行為。
 
-- A class can **implement multiple interfaces**, which compensates for Java’s **single inheritance** (only one superclass).
-- The **Interface Segregation Principle** (from SOLID) recommends designing focused interfaces rather than large, monolithic ones — important for clear and maintainable APIs.
-
----
-
-## Table of Contents
-
-1. [Core Idea](#core-idea)
-2. [Abstract Class vs Interface (Essential Difference)](#abstract-class-vs-interface-essential-difference)
-3. [When to Use Which](#when-to-use-which)
-4. [Example](#example)
-5. [Summary](#summary)
+- 一個類別可**實作多個介面**，彌補 Java 的**單一繼承**限制。
+- **介面隔離原則**：設計精簡、聚焦的介面，而非龐大單一的介面。
 
 ---
 
-## Core Idea
+## 目錄
 
-- **Interface** = contract: method signatures (and optionally default/static methods), no instance state.
-- **Implements** = the class guarantees it provides those methods; callers depend on the interface type.
+1. [核心語法](#核心語法)
 
----
+2. [核心特性](#核心特性)
 
-## Abstract Class vs Interface (Essential Difference)
+3. [適用情境](#適用情境)
 
-| Focus | Abstract class | Interface |
-|-------|----------------|-----------|
-| **Identity** | “What the object **is**” — part of a class hierarchy with shared state and behavior. | “What the object **can do**” — a set of capabilities (behavior only). |
-| **State** | Can have fields, constructors, and shared implementation. | No instance fields (only `public static final` constants traditionally). |
-| **Inheritance** | Single: one abstract (or concrete) superclass. | Multiple: a class can implement many interfaces. |
-
-**Rule of thumb:** Use an **abstract class** when you care about **identity and shared implementation**; use an **interface** when you care about **behavior and multiple contracts**.
+4. [介面 vs 抽象類別](#介面-vs-抽象類別)
 
 ---
 
-## When to Use Which
-
-- **Interface** — Multiple unrelated classes need to support the same capability (e.g. `Comparable`, `Serializable`); API boundaries; dependency injection and testing.
-- **Abstract class** — Several classes share a lot of code and a clear “is-a” relationship; you need shared fields or constructors.
-
----
-
-## Example
+## 核心語法
 
 ```java
-public interface Drawable {
-    void draw();
-}
-
-public class Circle implements Drawable {
-    @Override
-    public void draw() { /* ... */ }
-}
-
-// Another class can also implement Drawable and other interfaces
-public class Button implements Drawable, Clickable { }
+public class MyClass implements Interface1, Interface2 { ... }
 ```
+
+- `implements` 後可接多個介面，以逗號分隔。
 
 ---
 
-## Summary
+## 核心特性
 
-- **Interface** = contract (capabilities); **abstract class** = template (identity + shared code).
-- Prefer **small, focused interfaces** (Interface Segregation) for better API design.
+| 特性 | 說明 |
+|------|------|
+| **不可實例化** | 介面無法 `new`、**沒有建構子**。 |
+| **實作類別的義務** | 實作類別必須**覆寫介面中所有抽象方法**；若多介面有同名方法，只需寫一次。若無法全部實作，則實作類別須宣告為 `abstract`。 |
+| **成員變數** | 只能是**常數**；預設為 `public static final`。 |
+| **介面繼承** | 介面可繼承其他介面（`extends`），一個介面可繼承多個介面。 |
+
+---
+
+## 適用情境
+
+適用於**介面**的情境：
+
+- 多個**不相關的類別**需要支援相同能力（如 `Comparable`、`Serializable`）。
+
+- 定義 **API 合約**；依賴注入、測試時依賴介面型別。
+
+- 需要**多重合約**（一個類別實作多個介面）。
+
+---
+
+## 介面 vs 抽象類別
+
+| 面向 | 介面 | 抽象類別 |
+|------|------|----------|
+| **本質** | **能做什麼**（能力／合約） | **是什麼**（身份／種類） |
+| **狀態** | 僅常數（`public static final`）；Java 8+ 可有 default 方法 | 可有實例欄位與建構子 |
+| **繼承** | 一個類別可實作**多個**介面 | 單一繼承（一個父類別） |
+
+**口訣：** 介面 ≈ **能做什麼**／合約；抽象類別 ≈ **是什麼**／共用實作。
